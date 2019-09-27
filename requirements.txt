@@ -3,7 +3,6 @@ uWSGI<2.0.18
 Click<7.0
 Flask<1.0.3
 Flask-WTF<0.14.2
-Jinja2<2.10.1
 pyparsing<2.4.0
 pytest<4.6.3
 WTForms<2.2.1
