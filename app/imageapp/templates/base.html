@@ -1,0 +1,33 @@
+<!doctype html5>
+<title>{% block title %}{% endblock %} - Easyfaces</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='imgareaselect-default.css') }}">
+
+<nav>
+  <h1><a href="/">Easyfaces</a></h1>
+  <ul>
+    {% if g.user %}
+      <li><span>{{ g.user['username'] }}</span>
+      <li><a class="hdr" href="{{ url_for('auth.logout') }}">Logout</a>
+
+        {% if g.user['admin_status'] == 1 %}
+        <li><a class="hdr" href="{{ url_for('auth.edit_userlist') }}">Users</a>
+        {% endif %}
+
+    {% else %}
+      <li><a class="hdr" href="{{ url_for('auth.register') }}">Register</a>
+      <li><a class="hdr" href="{{ url_for('auth.login') }}">Login</a>
+    {% endif %}
+  </ul>
+</nav>
+
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</section>

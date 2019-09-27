@@ -1,0 +1,36 @@
+
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Images{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('images.create') }}">Upload new</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for image in images %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ image['about'] }}</h1>
+          <div class="about">Created by {{ image['username'] }} on {{ image['created'].strftime('%Y-%m-%d') }}</div>
+        </div>
+        {% if g.user['id'] == image['author_id'] or g.user['admin_status'] == 1 %}
+        <table >
+          <tr><td><a class="action" href="{{ url_for('images.edit', id=image['id']) }}">Edit</a></td>
+          <td><a class="action" onclick="return confirm('Confirm deletion');" href="{{ url_for('images.delete', id=image['id']) }}">Delete</a></td></tr>
+        </table>
+        {% endif %}
+      </header>
+      <p class="body"><a href="/{{ imgbank }}/{{ image['filename'] }}">
+        <img src="/{{ imgbank }}/{{ image['filename'] }}" width="250px"></a></p>
+
+    </article>
+
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+
+  {% endfor %}
+{% endblock %}

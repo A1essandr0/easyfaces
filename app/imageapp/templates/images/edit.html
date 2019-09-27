@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit "{{ image['about'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% if coordinates[0] %}
+        Faces:
+        <div class="coordinate-container">
+        {% for coord in coordinates %}
+            <div class="coordinate-four">
+                <div class="coordinate">top x:</div><div class="coordinate"><input class="coordinate-value" size="6" type="text" value="{{ coord['x1'] }}" disabled></div>
+                <div class="coordinate">top y:</div><div class="coordinate"><input class="coordinate-value" size="6" type="text" value="{{ coord['y1'] }}" disabled></div>
+                <div class="coordinate">bottom x:</div><div class="coordinate"><input class="coordinate-value" size="6" type="text" value="{{ coord['x2'] }}" disabled></div>
+                <div class="coordinate">bottom y:</div><div class="coordinate"><input class="coordinate-value" size="6" type="text" value="{{ coord['y2'] }}" disabled></div>
+            </div>
+            
+        {% endfor %}
+        </div>
+    {% else %}
+        <div>No records yet.</div>
+    {% endif %}
+
+    <form method="post" action="{{ url_for('images.facecloud', id=image['id']) }}">
+        <input type="submit" value="Detect faces with Azure Cognitive Services">
+    </form>
+
+    <img id="photo" src="/{{ imgbank }}/{{ image['filename'] }}">
+
+  <form method="post">
+    <input type="hidden" name="x1" value=""><!--Send coordinates-->
+    <input type="hidden" name="y1" value="">
+    <input type="hidden" name="x2" value="">
+    <input type="hidden" name="y2" value="">
+
+    <label for="about">Description</label>
+    <input name="about" id="about" value="{{ request.form['about'] or image['about'] }}" required>
+    <input type="submit" value="Save">
+  </form>
+  <hr>
+  <script type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='jquery.imgareaselect.pack.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+        $("#photo").imgAreaSelect({
+            handles: true,
+            onSelectEnd: function (img, selection) {
+            $('input[name="x1"]').val(selection.x1);
+            $('input[name="y1"]').val(selection.y1);
+            $('input[name="x2"]').val(selection.x2);
+            $('input[name="y2"]').val(selection.y2);
+            }
+        })
+        })
+
+    </script>
+{% endblock %}

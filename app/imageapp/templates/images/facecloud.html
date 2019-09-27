@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Azure Cognitive Services{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <div> Detected face rectangles:
+    {% for coord in coordinates %}
+        <p><span>({{ coord['x1'] }}; {{ coord['y1'] }}) and ({{ coord['x2'] }}; {{ coord['y2'] }})</span></p>
+    {% endfor %}
+    </div>
+    <p><a href="/{{ imgbank }}/{{ json_filename }}">raw json</a></p>
+
+{% endblock %}

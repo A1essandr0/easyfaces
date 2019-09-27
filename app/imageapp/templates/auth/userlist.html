@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <h1>{% block title %}User list{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+    <table class="table">
+        <thead>
+        <tr><th>Username</th>
+            <th>id</th>
+            <th>Photos loaded</th>
+            <th>Is administrator</th>
+            <th>Change admin status</th>
+            <th>Delete user</th>
+        </tr>
+        </thead>
+        
+        {% for user in users %}
+        <tr>
+            <td>{{ user['username']}}</td>
+            <td>{{ user['id']}}</td>
+            <td>{{ user['upload_count']}}</td>
+            <td>{% if user['admin_status'] %}Yes</td>
+                <td>{% if user['username'] != 'admin' %}<input type="checkbox" name="unmake_admin_id{{ user['id']}}"></td>
+                <td><input type="checkbox" name="delete_account_id{{ user['id']}}"></td>{% endif %}
+
+                {% else %}
+                No</td><td><input type="checkbox" name="make_admin_id{{ user['id']}}"></td>
+                            <td><input type="checkbox" name="delete_account_id{{ user['id']}}"></td>
+                {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+    <input type="submit" value="Edit users" onclick="return confirm('Confirm changes');">
+    </form>
+
+{% endblock %}
